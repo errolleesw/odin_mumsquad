@@ -51,4 +51,19 @@ Run the seed file
 bundle exec rails db:seed
 ```
 ### Create posts model and use as homepage
-Create a simple one page app
+Create the posts scaffold. This creates a full set of RESTful resources for a given model. This includes migration, a model file, a controller with CRUD actions and views for the model's index, show, new and edit actions.
+```bash
+rails generate scaffold Post title:string content:text
+rails db:migrate # run this to migrate the db and create the table / fields.
+```
+Set the root to the posts index page in `routes.rb`
+```bash
+root 'posts#index'
+```
+### Protect app from unauthorised viewing
+Add the following to `app/controllers/application_controller.rb`
+```bash
+before_action :authenticate_user!
+```
+### Give it all a test drive
+Spin up a server `rails s`. and Open localhost in a browswer. You should need to log in to access the home page.
