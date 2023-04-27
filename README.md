@@ -65,5 +65,36 @@ Add the following to `app/controllers/application_controller.rb`
 ```bash
 before_action :authenticate_user!
 ```
+Add navbar functionality and add logout button. Ignore the css classes for now, will come back to this later with styling.
+
+Note: because we are using the hotwire/turbo method by default, we need to add the `turbo-action="replace"` and `turbo-method="delete"` data attributes to the logout link.
+```html
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-end">
+    <div class="navbar-item">
+      <div class="buttons">
+        <% if current_user %>
+          <%= link_to "Logout", destroy_user_session_path, method: :delete, data: { turbo_action: "replace", turbo_method: "delete" }, class: 'button is-link' %>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, class: 'button is-link' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>
+```
+We also want to redirect the user to the login page after signing out. Add this to teh `application_controller.rb` file.
+```ruby
+class ApplicationController < ActionController::Base
+  # ...
+
+  protected
+
+  def after_sign_out_path_for(resource_or_scope)
+    new_user_session_path
+  end
+end
+```
+
 ### Give it all a test drive
 Spin up a server `rails s`. and Open localhost in a browswer. You should need to log in to access the home page.
